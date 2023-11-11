@@ -8,9 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:we_sweat/pages/home.dart';
 import 'package:we_sweat/pages/splash.dart';
 import 'package:we_sweat/providers/profile_provider.dart';
+import 'package:we_sweat/services/messaging_service.dart';
 import 'package:we_sweat/theme/theme_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+MessagingService _msgService = MessagingService();
 
 void main() async {
   await Hive.initFlutter();
@@ -18,16 +21,25 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-  if (apnsToken != null) {
-    final fcmToken =
-        await FirebaseMessaging.instance.getToken(vapidKey: apnsToken);
-    print(fcmToken);
-  }
-  if (Platform.isIOS) {
-    FirebaseMessaging.instance.requestPermission();
-  }
+  // final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+  // if (apnsToken != null) {
+  //   final fcmToken =
+  //       await FirebaseMessaging.instance.getToken(vapidKey: apnsToken);
+  //   print(fcmToken);
+  // }
+  // if (Platform.isIOS) {
+  //   FirebaseMessaging.instance.requestPermission();
+  // }
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await _msgService.init();
+
   runApp(const MyApp());
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(" --- background message received ---");
+  print(message.notification!.title);
+  print(message.notification!.body);
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +60,9 @@ class MyApp extends StatelessWidget {
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                 ),
                 home: ProfileProvider(
-                  child: SplashScreen(),
+                  child: SplashScreen(
+                    msgServ: _msgService,
+                  ),
                 ));
           });
         });

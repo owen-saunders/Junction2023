@@ -7,11 +7,14 @@ import 'package:we_sweat/pages/profile.dart';
 import 'package:we_sweat/providers/feed_provider.dart';
 import 'package:we_sweat/providers/profile_provider.dart';
 import 'package:we_sweat/theme/theme_manager.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 enum HexState { FILLED, EMPTY }
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  var msgServ;
+
+  Home({super.key, required this.msgServ});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class Home extends StatelessWidget {
           child: InkWell(
               onTap: () {
                 print('activity started');
+                _sendMessage();
               },
               child: Column(
                 children: [
@@ -215,5 +219,18 @@ class Home extends StatelessWidget {
           rows: 1,
           buildTile: (col, row) => menu.elementAt(col)),
     );
+  }
+
+  Future _sendMessage() async {
+    var func = FirebaseFunctions.instance.httpsCallable("notifySubscribers");
+    var res = await func.call(<String, dynamic>{
+      "targetDevices": [
+        "f6vbPygENEcwu07kCemcd0:APA91bGDmQKQki_bSi9CM_NuRB_LAz9uAxlTXfUsCgLSB7StVWjsGQDrLHTZ1ynggLsGDMXwNJX_42YlK79uVlxk9AG13uJDsuPs6k9FE_dy0-FPZs8TSsaHUFarYz6OCwdybXri6RtK"
+      ],
+      "messageTitle": "Test title",
+      "messageBody": "Test"
+    });
+
+    print("message was ${res.data as bool ? "sent!" : "not sent!"}");
   }
 }

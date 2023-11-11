@@ -7,7 +7,9 @@ import 'package:we_sweat/widgets/base_widget.dart';
 import '../theme/theme_manager.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+  var msgServ;
+
+  LoginScreen({super.key, required this.msgServ});
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -112,7 +114,9 @@ class LoginScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return Home();
+                                  return Home(
+                                    msgServ: msgServ,
+                                  );
                                 },
                               ),
                               (_) => false,
