@@ -15,6 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "profile_picture",
             "friends",
+            "fcm_token",
         ]
 
 
