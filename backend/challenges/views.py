@@ -50,7 +50,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = self.queryset
-        # All posts for all my challenges
+        # Only my posts for all my teams'/groups' challenges
         only_my_challenges = self.request.query_params.get("my_challenges", None)
         if only_my_challenges:
             me = self.request.user
@@ -63,7 +63,7 @@ class PostViewSet(viewsets.ModelViewSet):
             qs = qs.filter(challenge__in=my_challenges)
             return qs
 
-        # All posts for challenge
+        # All posts for my teams'/groups' challenges
         challenge = self.request.query_params.get("challenge", None)
         if challenge:
             qs = qs.filter(challenge__pk=challenge)
