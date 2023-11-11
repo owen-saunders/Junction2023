@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:provider/provider.dart';
+import 'package:we_sweat/pages/workouts.dart';
+import 'package:we_sweat/providers/profile_provider.dart';
 import 'package:we_sweat/state/profile_state.dart';
 import 'package:we_sweat/theme/theme_manager.dart';
 import 'package:we_sweat/widgets/base_widget.dart';
@@ -15,6 +17,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late bool auth;
   @override
   Widget build(BuildContext context) {
     final ThemeManager theme =
@@ -25,131 +28,182 @@ class _ProfileScreenState extends State<ProfileScreen> {
           state: Provider.of<ProfileState>(context),
           onStateReady: (state) async {
             state.getUserDetails();
+            auth = await state.isAuthorised();
           },
           builder: (context, state, child) {
             return SafeArea(
-                child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Profile",
-                                style: theme.themeData.textTheme.titleLarge,
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    color: theme.colors.light,
-                                    size: 30,
-                                  ))
-                            ]),
-                        const SizedBox(height: 24),
-                        Center(
-                            child: Stack(
+                child: SingleChildScrollView(
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            FluttermojiCircleAvatar(
-                              backgroundColor: theme.colors.light,
-                              radius: MediaQuery.of(context).size.width / 3,
-                            ),
-                            // Container(
-                            //   width: MediaQuery.of(context).size.width / 3,
-                            //   height: MediaQuery.of(context).size.width / 3,
-                            //   decoration: BoxDecoration(
-                            //       shape: BoxShape.circle,
-                            //       image: DecorationImage(
-                            //           fit: BoxFit.cover, image: state.image)),
-                            // ),
-                            Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                    height:
-                                        MediaQuery.of(context).size.width / 9,
-                                    width:
-                                        MediaQuery.of(context).size.width / 9,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: theme.colors.highlight,
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AvatarPage()));
-                                      },
-                                    ))),
-                          ],
-                        )),
-                        SizedBox(
-                          height: 50,
-                        ),
-                        Container(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  TextField(
-                                      enabled: false,
-                                      decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.only(bottom: 24),
-                                          labelText: "Display Name",
-                                          labelStyle: theme
-                                              .themeData.textTheme.bodyMedium,
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          hintText:
-                                              "${state.user.fname} ${state.user.lname}",
-                                          hintStyle: theme
-                                              .themeData.textTheme.bodyLarge)),
-                                  const SizedBox(
-                                    height: 24,
+                                  Text(
+                                    "Profile",
+                                    style: theme.themeData.textTheme.titleLarge,
                                   ),
-                                  TextField(
-                                      enabled: false,
-                                      decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.only(bottom: 24),
-                                          labelText: "Username",
-                                          labelStyle: theme
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.cancel,
+                                        color: theme.colors.light,
+                                        size: 30,
+                                      ))
+                                ]),
+                            const SizedBox(height: 24),
+                            Center(
+                                child: Stack(
+                              children: [
+                                FluttermojiCircleAvatar(
+                                  backgroundColor: theme.colors.light,
+                                  radius: MediaQuery.of(context).size.width / 3,
+                                ),
+                                // Container(
+                                //   width: MediaQuery.of(context).size.width / 3,
+                                //   height: MediaQuery.of(context).size.width / 3,
+                                //   decoration: BoxDecoration(
+                                //       shape: BoxShape.circle,
+                                //       image: DecorationImage(
+                                //           fit: BoxFit.cover, image: state.image)),
+                                // ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width /
+                                                9,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                9,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: theme.colors.highlight,
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AvatarPage()));
+                                          },
+                                        ))),
+                              ],
+                            )),
+                            SizedBox(
+                              height: 50,
+                            ),
+                            Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      bottom: 24),
+                                              labelText: "Display Name",
+                                              labelStyle: theme.themeData
+                                                  .textTheme.bodyMedium,
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              hintText:
+                                                  "${state.user.fname} ${state.user.lname}",
+                                              hintStyle: theme.themeData
+                                                  .textTheme.bodyLarge)),
+                                      const SizedBox(
+                                        height: 24,
+                                      ),
+                                      TextField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      bottom: 24),
+                                              labelText: "Username",
+                                              labelStyle: theme.themeData
+                                                  .textTheme.bodyMedium,
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              hintText: state.user.username,
+                                              hintStyle: theme.themeData
+                                                  .textTheme.bodyLarge)),
+                                      const SizedBox(
+                                        height: 24,
+                                      ),
+                                      TextField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      bottom: 24),
+                                              labelText: "Email",
+                                              labelStyle: theme.themeData
+                                                  .textTheme.bodyMedium,
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              hintText: state.user.email,
+                                              hintStyle: theme.themeData
+                                                  .textTheme.bodyLarge)),
+                                      const SizedBox(
+                                        height: 24,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Allow access to Health",
+                                            style: theme
+                                                .themeData.textTheme.bodyMedium,
+                                          ),
+                                          Spacer(),
+                                          Switch(
+                                            value: auth,
+                                            onChanged: (bool value) async {
+                                              if (value) {
+                                                state.authorize();
+                                                auth = true;
+                                              } else {
+                                                state.revokeAccess();
+                                                auth = false;
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 24,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileProvider(
+                                                          child:
+                                                              WorkoutScreen())));
+                                        },
+                                        child: Text(
+                                          "View workouts",
+                                          style: theme
                                               .themeData.textTheme.bodyMedium,
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          hintText: state.user.username,
-                                          hintStyle: theme
-                                              .themeData.textTheme.bodyLarge)),
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
-                                  TextField(
-                                      enabled: false,
-                                      decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.only(bottom: 24),
-                                          labelText: "Email",
-                                          labelStyle: theme
-                                              .themeData.textTheme.bodyMedium,
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          hintText: state.user.email,
-                                          hintStyle: theme
-                                              .themeData.textTheme.bodyLarge)),
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
-                                ]))
-                      ],
-                    )));
+                                        ),
+                                      )
+                                    ]))
+                          ],
+                        ))));
           }),
     );
   }
