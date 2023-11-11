@@ -9,7 +9,9 @@ import 'package:we_sweat/state/profile_state.dart';
 import '../widgets/base_widget.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  var msgServ;
+
+  SplashScreen({Key? key, required this.msgServ}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,19 @@ class SplashScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              ProfileProvider(child: LoginScreen())));
+                          builder: (context) => ProfileProvider(
+                                  child: LoginScreen(
+                                msgServ: msgServ,
+                              ))));
                 } else {
                   //logged in
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Home(
+                                msgServ: msgServ,
+                              )));
                 }
               });
             },

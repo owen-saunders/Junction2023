@@ -160,27 +160,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       const SizedBox(
                                         height: 24,
                                       ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Allow access to Health",
-                                            style: theme
-                                                .themeData.textTheme.bodyMedium,
-                                          ),
-                                          Spacer(),
-                                          Switch(
-                                            value: auth,
-                                            onChanged: (bool value) async {
-                                              if (value) {
-                                                state.authorize();
-                                                auth = true;
-                                              } else {
-                                                state.revokeAccess();
-                                                auth = false;
-                                              }
-                                            },
-                                          ),
-                                        ],
+                                      InkWell(
+                                        onTap: state.authorize,
+                                        child: Text(
+                                          "Allow access to Health",
+                                          style: theme
+                                              .themeData.textTheme.bodyMedium,
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 24,

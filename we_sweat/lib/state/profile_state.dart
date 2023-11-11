@@ -48,8 +48,11 @@ class UserPreferences {
         // "profilePic": profilePic
       });
 
+      print("saved user");
+
       return true;
     } catch (e) {
+      print(e);
       return false;
     }
   }
@@ -75,6 +78,7 @@ class UserPreferences {
       id = userBox.get('id');
       // profilePic = userBox.get("profilePic") ?? '';
     } catch (e) {
+      print(e);
       return User(
           token: '', username: '', fname: '', lname: '', email: '', id: -1
           // profilePicture: ''
@@ -243,11 +247,8 @@ class ProfileState extends ChangeNotifier {
 
   Future<bool> isUserLoggedIn() async {
     User user = await UserPreferences().getUser();
-    return (user.fname != '' &&
-        user.token != '' &&
-        user.email != '' &&
-        user.lname != '' &&
-        user.username != '');
+    print(user);
+    return user.token != '';
   }
 
   ImageProvider<Object> image = const NetworkImage(
@@ -345,7 +346,7 @@ class ProfileState extends ChangeNotifier {
 
     // get data within the last 24 hours
     final now = DateTime.now();
-    final yesterday = now.subtract(Duration(hours: 24));
+    final yesterday = now.subtract(Duration(days: 30));
 
     // Clear old data points
     healthDataList.clear();

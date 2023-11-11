@@ -85,8 +85,7 @@ class _HealthAppState extends State<HealthApp> {
       }
     }
 
-    setState(() => _state =
-        (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED);
+    _state = (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED;
   }
 
   /// Fetch data points from the health plugin and show them in the app.
