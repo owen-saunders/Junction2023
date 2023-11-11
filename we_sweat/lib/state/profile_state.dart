@@ -204,12 +204,6 @@ class ProfileState extends ChangeNotifier {
     gettingSearchedMyChallenges = true;
     notifyListeners();
 
-    myChallenges = [
-      Challenge(title: 'test 1'),
-      Challenge(title: 'test 2'),
-      Challenge(title: 'test 3')
-    ];
-
     myChallenges = await service.getMyChallenges();
 
     gettingSearchedMyChallenges = false;

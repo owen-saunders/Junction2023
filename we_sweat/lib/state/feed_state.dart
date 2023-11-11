@@ -13,15 +13,10 @@ class FeedState extends ChangeNotifier {
     gettingFeed = true;
     notifyListeners();
 
-    feed = [
-      FeedItem(
-          media:
-              'https://media.istockphoto.com/id/925354566/vector/young-running-woman-isolated-vector-silhouette-run-side-view.jpg?s=612x612&w=0&k=20&c=O2pwvF5jAf8sBq1FeOPcrPJTY4zyeC26lyPfF5N_v-4=',
-          title: 'test 1'),
-      FeedItem(title: 'test 2')
-    ];
+    feed = await service.getFeed();
+    notifyListeners();
 
-    //feed = await service.getFeed();
+    print(feed);
 
     gettingFeed = false;
     gotFeed = true;

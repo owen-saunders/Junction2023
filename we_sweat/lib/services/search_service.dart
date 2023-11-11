@@ -13,7 +13,7 @@ class SearchService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/challenges/?search=$query';
+    url = 'http://94.237.9.79/api/v1/challenges/?search=$query';
 
     var headers = {
       'Content-Type': 'application/json',
@@ -29,8 +29,8 @@ class SearchService {
 
       Map<String, dynamic> responseDecoded = jsonDecode(response.body);
 
-      // print(response.statusCode);
-      // print(response.body);
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200) {
         for (var result in responseDecoded['results']) {
@@ -39,7 +39,7 @@ class SearchService {
       }
       return challenges;
     } catch (e) {
-      // print(e);
+      print(e);
       return challenges;
     }
   }
@@ -50,7 +50,7 @@ class SearchService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/challenges/?my_challenges=true';
+    url = 'http://94.237.9.79/api/v1/challenges/?my_challenges=true';
 
     var headers = {
       'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ class SearchService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/challenges/?popular=true';
+    url = 'http://94.237.9.79/api/v1/challenges/?popular=true';
 
     var headers = {
       'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ class SearchService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/feeds/?challenge=$id';
+    url = 'http://94.237.9.79/api/v1/feeds/?challenge=$id';
 
     Uri uri = Uri.parse(url);
 
@@ -155,7 +155,7 @@ class SearchService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/participate/';
+    url = 'http://94.237.9.79/api/v1/participate/';
 
     var map = <String, dynamic>{};
     map['user'] = user.id;
@@ -186,7 +186,7 @@ class SearchService {
       int challenge, String title, String image) async {
     User user = await UserPreferences().getUser();
 
-    var url = "http://10.173.45.133:8000/api/v1/feeds/";
+    var url = "http://94.237.9.79/api/v1/feeds/";
 
     var map = <String, dynamic>{};
     map['challenge'] = challenge;
@@ -244,7 +244,7 @@ class SearchService {
     // print(word);
 
     url =
-        "http://10.173.45.133:8000/api/v1/verify-image/predict_caption/?word=$word&image_path=$image";
+        "http://94.237.9.79/api/v1/verify-image/predict_caption/?word=$word&image_path=$image";
     Uri uri = Uri.parse(url);
 
     var headers = {
@@ -280,7 +280,7 @@ class SearchService {
 
     map['verified'] = true;
 
-    url = "http://10.173.45.133:8000/api/v1/feeds/$id/";
+    url = "http://94.237.9.79/api/v1/feeds/$id/";
     Uri uri = Uri.parse(url);
 
     var headers = {

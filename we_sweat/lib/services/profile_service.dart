@@ -15,7 +15,7 @@ class ProfileService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/challenges/?my_challenges=true';
+    url = 'http://94.237.9.79/api/v1/challenges/';
 
     var headers = {
       'Content-Type': 'application/json',
@@ -47,22 +47,22 @@ class ProfileService {
   }
 
   Future<Map<String, dynamic>> login(String username, String password) async {
-    var url = "http://10.173.45.133:8000/api/login/";
+    var url = "http://94.237.9.79/api/login/";
     var map = <String, dynamic>{};
     map['username'] = username;
     map['password'] = password;
 
-    // print(username);
-    // print(password);
+    print(username);
+    print(password);
 
     try {
       var response = await http
           .post(Uri.parse(url), body: map)
           .timeout(Duration(seconds: 1));
 
-      // print(response.body);
-      // print(response.statusCode);
-      // print(response.headers);
+      print(response.body);
+      print(response.statusCode);
+      print(response.headers);
 
       if (response.statusCode == 200) {
         var responseDecoded = jsonDecode(response.body)["user"];
@@ -70,9 +70,9 @@ class ProfileService {
 
         UserPreferences().saveUser(
             token,
-            responseDecoded["username"],
-            responseDecoded["first_name"],
-            responseDecoded["last_name"],
+            responseDecoded["username"] ?? "",
+            responseDecoded["first_name"] ?? "",
+            responseDecoded["last_name"] ?? "",
             responseDecoded["email"],
             responseDecoded["id"]
             // responseDecoded["profile_picture"]
@@ -82,7 +82,7 @@ class ProfileService {
         return {'status': false, 'message': 'Login unsuccessful'};
       }
     } catch (e) {
-      // print(e);
+      print(e);
       return {
         'status': false,
         'message': 'Oops something went wrong, please try again'
@@ -96,7 +96,7 @@ class ProfileService {
 
     String url;
 
-    url = 'http://10.173.45.133:8000/api/v1/users/';
+    url = 'http://94.237.9.79/api/v1/users/';
 
     var headers = {
       'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ class ProfileService {
     String url;
     List<User> users = [];
 
-    url = 'http://10.173.45.133:8000/api/v1/users/me/';
+    url = 'http://94.237.9.79/api/v1/users/me/';
 
     Uri uri = Uri.parse(url);
 
@@ -171,7 +171,7 @@ class ProfileService {
     String url;
     List<User> users = [];
 
-    url = 'http://10.173.45.133:8000/api/v1/users/';
+    url = 'http://94.237.9.79/api/v1/users/';
 
     Uri uri = Uri.parse(url);
 
@@ -212,7 +212,7 @@ class ProfileService {
 
   //   String url;
 
-  //   url = 'http://10.173.45.133:8000/api/v1/challenges/stats/?user_id=$id';
+  //   url = 'http://94.237.9.79/api/v1/challenges/stats/?user_id=$id';
 
   //   Uri uri = Uri.parse(url);
 
@@ -248,7 +248,7 @@ class ProfileService {
 
   //   Stats stats = Stats();
 
-  //   url = 'http://10.173.45.133:8000/api/v1/challenges/my-stats/';
+  //   url = 'http://94.237.9.79/api/v1/challenges/my-stats/';
 
   //   Uri uri = Uri.parse(url);
 
@@ -282,7 +282,7 @@ class ProfileService {
     String url;
 
     url =
-        'http://10.173.45.133:8000/api/v1/users/send_friend_request/?userID=${user.id}';
+        'http://94.237.9.79/api/v1/users/send_friend_request/?userID=${user.id}';
 
     Uri uri = Uri.parse(url);
 

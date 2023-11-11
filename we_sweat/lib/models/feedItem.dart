@@ -26,13 +26,13 @@ class FeedItem {
 
   factory FeedItem.fromJson(Map<String, dynamic> responseData) {
     return FeedItem(
-        media: responseData['photo'],
-        likes: responseData['likes'],
-        title: responseData['title'],
-        owner: responseData["owner"],
-        name: responseData["name"],
-        isVerified: responseData['verified'],
-        word: responseData['word'],
-        challenge: responseData['challenge']);
+        media: responseData['photo'] ?? "",
+        likes: responseData['likes'] ?? "",
+        title: responseData['title'] ?? "",
+        owner: responseData["owner"] ?? "",
+        name: responseData["name"] ?? "",
+        isVerified: responseData['verified'] ?? false,
+        word: responseData['word'] ?? "",
+        challenge: responseData['challenge'] ?? -1);
   }
 }

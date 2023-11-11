@@ -12,7 +12,7 @@ class FeedService {
 
     String url = '';
 
-    url = 'http://10.173.45.133:8000/api/v1/feeds/?my_challenges=true';
+    url = 'http://94.237.9.79/api/v1/feeds/';
 
     Uri uri = Uri.parse(url);
 
@@ -27,16 +27,18 @@ class FeedService {
 
       Map<String, dynamic> responseDecoded = jsonDecode(response.body);
 
-      // print(response.body);
-      // print(response.statusCode);
+      print(response.body);
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         for (var result in responseDecoded['results']) {
           feed.add(FeedItem.fromJson(result));
         }
       }
+      print(feed);
       return feed;
     } catch (e) {
+      print(e);
       return feed;
     }
   }
