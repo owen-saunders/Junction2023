@@ -64,7 +64,7 @@ class Segment(models.Model):
             # Max and min values for position
             models.CheckConstraint(
                 check=models.Q(position__gte=1) & models.Q(position__lte=6),
-                name="position_range",
+                name="segment_position_range",
             ),
         ]
 
@@ -82,6 +82,16 @@ class Hexagon(models.Model):
     - 4: Flexibility, Balance and Coordination
     """
     segments = models.ManyToManyField(Segment, related_name="hexagon_segments", blank=True)
+    position = models.PositiveSmallIntegerField(default=1, unique=True)
+
+    class Meta:
+        constraints = [
+            # Max and min values for position
+            models.CheckConstraint(
+                check=models.Q(position__gte=1) & models.Q(position__lte=1024),
+                name="hexagon_position_range",
+            ),
+        ]
 
 
 class TileMap(models.Model):

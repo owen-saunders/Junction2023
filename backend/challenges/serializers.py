@@ -84,6 +84,7 @@ class HexagonSerializer(serializers.ModelSerializer):
         model = Hexagon
         fields = [
             "segments",
+            "position",
         ]
 
 
@@ -102,13 +103,16 @@ class TileMapSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Custom create method to handle nested serializers."""
         # Create 1024 hexagons and set default value as having no segments for each
+        # Remove hexagons data from validated_data
+        _ = validated_data.pop("hexagons", None)
         hexagons = []
-        for _ in range(1024):
-            hexagon, _ = Hexagon.objects.get_or_create(segments=None)
+        for i in range(1024):
+            hexagon, _ = Hexagon.objects.get_or_create(position=i+1)
             hexagons.append(hexagon)
-        validated_data["hexagons"] = hexagons
         validated_data["year"] = datetime.now().year
-        return super().create(validated_data)
+        obj = TileMap.objects.create(**validated_data)
+        obj.hexagons.set(hexagons)
+        return obj
 
     def update(self, instance, validated_data):
         """Custom update method to handle nested serializers"""
@@ -132,13 +136,15 @@ class TileMapSerializer(serializers.ModelSerializer):
 
         # Get the hexagons from the validated data and change the instance's hexagons at those positions
         hexagons = list(instance.hexagons.all())
-        print(hexagons)
 
         # For each hexagon, update the segments
         for hexagon_data in hexagons_data:
             segments_data = hexagon_data.pop("segments")
             
-            hexagon = Hexagon.objects.create()  # No segments by default
+            if hexagon_data["position"] > 0 and hexagon_data["position"] <= 1024:
+                hexagon = Hexagon.objects.create(position=hexagon_data["position"])  # No segments by default
+            else:
+                raise serializers.ValidationError("Hexagon position must be between 1 and 1024.")
             # For each segment in the 6 segments, update the type and position by creating a new segment
             for segment_data in segments_data:
                 # There are a finite number of combinations of type and position (6 * 5 * 4 * 3 * 2 * 1 = 720)
@@ -148,11 +154,7 @@ class TileMapSerializer(serializers.ModelSerializer):
                 # because all hexagons specify the position of the active segments (Sparsification)
                 hexagon.segments.add(segment)  # Order here doesn't matter
             hexagon.save()
-            # Change the hexagon at the given position
-            if hexagon_data["position"] > 0 and hexagon_data["position"] <= 1024:
-                hexagons[hexagon_data["position"] - 1] = hexagon
-            else:
-                raise serializers.ValidationError("Hexagon position must be between 1 and 1024.")
+            hexagons[hexagon_data["position"]-1] = hexagon
 
         # Update all given hexagons
         instance.hexagons.set(hexagons)
