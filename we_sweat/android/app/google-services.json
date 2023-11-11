@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "979036992776",
+    "project_id": "wesweat-junction",
+    "storage_bucket": "wesweat-junction.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979036992776:android:69e9a016f11bb3c57768bd",
+        "android_client_info": {
+          "package_name": "com.example.we_sweat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHCaHNtESC9Njpd8xX8yoBGVmTH18zHGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

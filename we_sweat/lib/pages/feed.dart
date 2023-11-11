@@ -45,18 +45,22 @@ class FeedScreen extends StatelessWidget {
                                       ))
                                 ]),
                             const SizedBox(height: 24),
-                            Expanded(
-                                child: ListView.separated(
-                              itemCount: state.feed.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return SearchProvider(
-                                    child: ItemFeed(item: state.feed[index]));
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return SizedBox(height: 10);
-                              },
-                            ))
+                            state.gettingFeed
+                                ? CircularProgressIndicator()
+                                : Expanded(
+                                    child: ListView.separated(
+                                    itemCount: state.feed.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return SearchProvider(
+                                          child: ItemFeed(
+                                              item: state.feed[index]));
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) {
+                                      return SizedBox(height: 10);
+                                    },
+                                  ))
                           ])));
             }));
   }
