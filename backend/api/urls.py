@@ -43,9 +43,9 @@ router.registry.extend(notifications_router.registry)
 
 # Default API Info
 api_info = openapi.Info(
-    title="Sustainable Challenges API",
+    title="WeSweat API",
     default_version="v1",
-    description="This is the documentation for the Sustainable Challenges API",
+    description="This is the documentation for the WeSweat API",
     license=openapi.License(name="MIT License"),
 )
 settings.SWAGGER_SETTINGS["DEFAULT_INFO"] = api_info
