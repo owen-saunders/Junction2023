@@ -79,6 +79,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_picture = models.FileField(null=True, blank=True)
     friends = models.ManyToManyField("User", blank=True)
 
+    fcm_token = models.CharField(max_length=1024, null=True, blank=True)
+
     # Permissions field.
     is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
