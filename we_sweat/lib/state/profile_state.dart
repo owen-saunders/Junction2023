@@ -115,6 +115,29 @@ class UserPreferences {
 }
 
 class ProfileState extends ChangeNotifier {
+  List<String> sportActivities = [
+    "Soccer (Football)",
+    "Basketball",
+    "Volleyball",
+    "Swimming",
+    "Tennis",
+    "Ultimate Frisbee",
+    "Cycling",
+    "Skateboarding",
+    "Rock Climbing",
+    "Karate or Martial Arts",
+    "Gymnastics",
+    "Golf",
+    "Archery",
+    "Rollerblading/Roller Skating",
+    "Canoeing/Kayaking",
+    "Surfing",
+    "Softball/Baseball",
+    "Rugby",
+    "Table Tennis",
+    "Dance"
+  ];
+
   bool gotFriends = false;
   bool gettingFriends = false;
   List<User> friends = [];

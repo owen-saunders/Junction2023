@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:provider/provider.dart';
+import 'package:we_sweat/pages/activity.dart';
 import 'package:we_sweat/pages/challenge.dart';
 import 'package:we_sweat/pages/feed.dart';
 import 'package:we_sweat/pages/profile.dart';
@@ -8,7 +9,6 @@ import 'package:we_sweat/providers/feed_provider.dart';
 import 'package:we_sweat/providers/profile_provider.dart';
 import 'package:we_sweat/state/profile_state.dart';
 import 'package:we_sweat/theme/theme_manager.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:we_sweat/widgets/base_widget.dart';
 
 enum HexState { FILLED, EMPTY }
@@ -25,9 +25,7 @@ class Home extends StatelessWidget {
 
     return BaseWidget<ProfileState>(
         state: Provider.of<ProfileState>(context),
-        onStateReady: (state) async {
-          state.getFriends();
-        },
+        onStateReady: (state) async {},
         builder: (context, state, child) {
           return Scaffold(
               backgroundColor: theme.colors.backgroundColor,
@@ -52,8 +50,17 @@ class Home extends StatelessWidget {
           color: theme.colors.highlight,
           child: InkWell(
               onTap: () {
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => ProfileProvider(
+                        child: ActivityScreen(),
+                      ),
+                      transitionDuration: Duration(milliseconds: 700),
+                      transitionsBuilder: (_, a, __, c) =>
+                          FadeTransition(opacity: a, child: c),
+                    ));
                 print('activity started');
-                _sendMessage(state);
               },
               child: Column(
                 children: [
@@ -153,8 +160,8 @@ class Home extends StatelessWidget {
               Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => FeedProvider(
-                      child: ProfileProvider(child: ChallengeScreen()),
+                    pageBuilder: (_, __, ___) => ProfileProvider(
+                      child: ChallengeScreen(),
                     ),
                     transitionDuration: Duration(milliseconds: 700),
                     transitionsBuilder: (_, a, __, c) =>
@@ -229,22 +236,5 @@ class Home extends StatelessWidget {
           rows: 1,
           buildTile: (col, row) => menu.elementAt(col)),
     );
-  }
-
-  Future _sendMessage(ProfileState state) async {
-    List<String> fcms = state.friends
-        .map((e) => e.fcm.toString())
-        .toList()
-        .where((element) => element != "")
-        .toList();
-    print(fcms);
-    var func = FirebaseFunctions.instance.httpsCallable("notifySubscribers");
-    var res = await func.call(<String, dynamic>{
-      "targetDevices": fcms,
-      "messageTitle": "Test title",
-      "messageBody": "Test"
-    });
-
-    print("message was ${res.data as bool ? "sent!" : "not sent!"}");
   }
 }
