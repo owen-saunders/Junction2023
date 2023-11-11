@@ -124,6 +124,7 @@ class ProfileState extends ChangeNotifier {
     notifyListeners();
 
     friends = await service.getFriends();
+    print(friends);
 
     gettingFriends = false;
     gotFriends = true;
@@ -364,11 +365,15 @@ class ProfileState extends ChangeNotifier {
 
     // filter out duplicates
     healthDataList = HealthFactory.removeDuplicates(healthDataList);
+    print(healthDataList);
     notifyListeners();
 
     healthDataList = healthDataList
         .where((element) => element.type == HealthDataType.WORKOUT)
         .toList();
+    print(healthDataList);
+    notifyListeners();
+
     // print the results
     healthDataList.forEach((x) => print(x));
 

@@ -10,6 +10,13 @@ class MessagingService {
     final settings = await _requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null) {
+        final fcmToken =
+            await FirebaseMessaging.instance.getToken(vapidKey: apnsToken);
+        print(fcmToken);
+      }
+
       await _getToken();
       _registerForegroundMessageHandler();
     }
