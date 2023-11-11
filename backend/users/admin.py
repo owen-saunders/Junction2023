@@ -23,6 +23,7 @@ class CustomUserAdmin(UserAdmin):
             _("Permissions"),
             {
                 "fields": (
+                    "fcm_token",
                     "is_verified",
                     "is_active",
                     "is_staff",
