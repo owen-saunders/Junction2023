@@ -146,10 +146,9 @@ class TileViewSet(viewsets.ModelViewSet):
             return Response("You can only update the current year's tilemap.", status=403)
 
         return super().update(request, *args, **kwargs)
-    
-        
-    @action(detail=True, methods=["GET"])
-    def get_my_tilemap(self, request, pk=None):
+
+    @action(detail=False, methods=["GET"], url_path="my-tilemap")
+    def get_my_tilemap(self, request):
         """Get the tilemap for the current year."""
         user_id = request.user.pk
         # Check if the user has a tilemap for the current year, and create one if not
