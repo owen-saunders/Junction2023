@@ -2,6 +2,7 @@ from django.db.models.aggregates import Count
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from .models import Challenge, Post, Participant, TileMap
 from .serializers import (
@@ -145,3 +146,12 @@ class TileViewSet(viewsets.ModelViewSet):
             return Response("You can only update the current year's tilemap.", status=403)
 
         return super().update(request, *args, **kwargs)
+
+    @action(detail=False, methods=["GET"], url_path="my-tilemap")
+    def get_my_tilemap(self, request):
+        """Get the tilemap for the current year."""
+        user_id = request.user.pk
+        # Check if the user has a tilemap for the current year, and create one if not
+        tilemap, _ = TileMap.objects.get_or_create(owner=user_id, year=datetime.now().year)
+        serializer = TileMapSerializer(tilemap, context={"request": request})
+        return Response(serializer.data)
