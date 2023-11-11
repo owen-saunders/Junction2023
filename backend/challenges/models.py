@@ -82,15 +82,6 @@ class Hexagon(models.Model):
     - 4: Flexibility, Balance and Coordination
     """
     segments = models.ManyToManyField(Segment, related_name="hexagon_segments", blank=True)
-    class Meta:
-        verbose_name_plural = "Hexagons"
-        # There should be no duplicate hexagons stored in the database (same constraint as for segments)
-        constraints = [
-            models.UniqueConstraint(
-                fields=["segments"],
-                name="unique_hexagon",
-            )
-        ]
 
 
 class TileMap(models.Model):
