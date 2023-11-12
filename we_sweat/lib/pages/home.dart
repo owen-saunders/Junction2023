@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:we_sweat/pages/challenge.dart';
 import 'package:we_sweat/pages/feed.dart';
 import 'package:we_sweat/pages/profile.dart';
+import 'package:we_sweat/pages/map.dart';
 import 'package:we_sweat/providers/feed_provider.dart';
 import 'package:we_sweat/providers/profile_provider.dart';
 import 'package:we_sweat/theme/theme_manager.dart';
@@ -72,7 +73,17 @@ class Home extends StatelessWidget {
           color: theme.colors.highlight,
           child: InkWell(
             onTap: () {
-              print('friedn started');
+              print('friend started');
+              Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => ProfileProvider(
+                      child: const MapScreen(),
+                    ),
+                    transitionDuration: const Duration(milliseconds: 700),
+                    transitionsBuilder: (_, a, __, c) =>
+                        FadeTransition(opacity: a, child: c),
+                  ));
             },
             child: Column(
               children: [

@@ -24,6 +24,10 @@
 	<string>Access health data</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Update health data</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Access location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Access location in background</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
