@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:health/health.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_sweat/models/challenge.dart';
 import 'package:we_sweat/models/user.dart';
 import 'package:we_sweat/services/profile_service.dart';
@@ -21,6 +24,8 @@ enum AppState {
   DATA_NOT_DELETED,
   STEPS_READY,
 }
+
+enum TileState { EMPTY, LOW, MEDIUM, HIGH }
 
 class UserPreferences {
   final storage = const FlutterSecureStorage();
@@ -612,5 +617,42 @@ class ProfileState extends ChangeNotifier {
       return _dataNotDeleted();
     else
       return _contentNotFetched();
+  }
+
+  //HEXAGON STATE
+  void initTileMap() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> tileMap = {};
+    for (int i = -16; i <= 16; i++) {
+      for (int j = -16; j <= 16; j++) {
+        String key = "$i,$j";
+        tileMap[key] = "0";
+      }
+    }
+    String encodedMap = json.encode(tileMap);
+
+    prefs.setString('tileMap', encodedMap);
+  }
+
+  Future<bool> boxExists() async {
+    bool exists = await Hive.boxExists('tileMap');
+    return exists;
+  }
+
+  Future<Map<String, dynamic>> getTileMap() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? encodedMap = await prefs.getString('tileMap');
+    Map<String, dynamic> decodedMap = json.decode(encodedMap!);
+
+    return decodedMap;
+  }
+
+  void saveTileMap(Map<String, dynamic> newMap) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String encodedMap = json.encode(newMap);
+
+    prefs.setString('tileMap', encodedMap);
   }
 }

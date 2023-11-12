@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:we_sweat/pages/home.dart';
@@ -105,6 +107,13 @@ class LoginScreen extends StatelessWidget {
                           textStyle: const TextStyle(fontSize: 16),
                         ),
                         onPressed: () async {
+                          Random random = Random();
+                          int randomNumber = random.nextInt(4) + 1;
+                          List<String> tiles = [];
+                          for (int i = 0; i <= randomNumber; i++) {
+                            int t = random.nextInt(3) + 1;
+                            tiles.add(t.toString());
+                          }
                           Map<String, dynamic> loginResponse =
                               await state.login(_usernameController.value.text,
                                   _passwordController.value.text);
@@ -116,6 +125,7 @@ class LoginScreen extends StatelessWidget {
                                 builder: (context) {
                                   return Home(
                                     msgServ: msgServ,
+                                    tiles: tiles,
                                   );
                                 },
                               ),

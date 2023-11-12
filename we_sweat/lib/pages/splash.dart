@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -32,14 +34,22 @@ class SplashScreen extends StatelessWidget {
                               ))));
                 } else {
                   //logged in
+
+                  //generate random number of tiles to place each with a random activity level:
+                  Random random = Random();
+                  int randomNumber = random.nextInt(4) + 1;
+                  List<String> tiles = [];
+                  for (int i = 0; i <= randomNumber; i++) {
+                    int t = random.nextInt(3) + 1;
+                    tiles.add(t.toString());
+                  }
+
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProfileProvider(
-                                  child: Home(
-                                msgServ: msgServ,
-                              ))));
+                              child: Home(msgServ: msgServ, tiles: tiles))));
                 }
               });
             },
