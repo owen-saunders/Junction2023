@@ -115,6 +115,29 @@ class UserPreferences {
 }
 
 class ProfileState extends ChangeNotifier {
+  List<String> sportActivities = [
+    "Soccer (Football)",
+    "Basketball",
+    "Volleyball",
+    "Swimming",
+    "Tennis",
+    "Ultimate Frisbee",
+    "Cycling",
+    "Skateboarding",
+    "Rock Climbing",
+    "Karate or Martial Arts",
+    "Gymnastics",
+    "Golf",
+    "Archery",
+    "Rollerblading/Roller Skating",
+    "Canoeing/Kayaking",
+    "Surfing",
+    "Softball/Baseball",
+    "Rugby",
+    "Table Tennis",
+    "Dance"
+  ];
+
   bool gotFriends = false;
   bool gettingFriends = false;
   List<User> friends = [];
@@ -124,6 +147,7 @@ class ProfileState extends ChangeNotifier {
     notifyListeners();
 
     friends = await service.getFriends();
+    print(friends);
 
     gettingFriends = false;
     gotFriends = true;
@@ -364,11 +388,15 @@ class ProfileState extends ChangeNotifier {
 
     // filter out duplicates
     healthDataList = HealthFactory.removeDuplicates(healthDataList);
+    print(healthDataList);
     notifyListeners();
 
     healthDataList = healthDataList
         .where((element) => element.type == HealthDataType.WORKOUT)
         .toList();
+    print(healthDataList);
+    notifyListeners();
+
     // print the results
     healthDataList.forEach((x) => print(x));
 

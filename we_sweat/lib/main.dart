@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:hexagon/hexagon.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:we_sweat/pages/home.dart';
 import 'package:we_sweat/pages/splash.dart';
 import 'package:we_sweat/providers/profile_provider.dart';
 import 'package:we_sweat/services/messaging_service.dart';
@@ -21,15 +17,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-  // if (apnsToken != null) {
-  //   final fcmToken =
-  //       await FirebaseMessaging.instance.getToken(vapidKey: apnsToken);
-  //   print(fcmToken);
-  // }
-  // if (Platform.isIOS) {
-  //   FirebaseMessaging.instance.requestPermission();
-  // }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await _msgService.init();
 

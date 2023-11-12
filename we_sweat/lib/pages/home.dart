@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:provider/provider.dart';
+import 'package:we_sweat/pages/activity.dart';
 import 'package:we_sweat/pages/challenge.dart';
 import 'package:we_sweat/pages/feed.dart';
 import 'package:we_sweat/pages/profile.dart';
 import 'package:we_sweat/pages/map.dart';
 import 'package:we_sweat/providers/feed_provider.dart';
 import 'package:we_sweat/providers/profile_provider.dart';
+import 'package:we_sweat/state/profile_state.dart';
 import 'package:we_sweat/theme/theme_manager.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:we_sweat/widgets/base_widget.dart';
 
 enum HexState { FILLED, EMPTY }
 
@@ -22,19 +24,25 @@ class Home extends StatelessWidget {
     final ThemeManager theme =
         Provider.of<ThemeManager>(context, listen: false);
 
-    return Scaffold(
-        backgroundColor: theme.colors.backgroundColor,
-        body: Column(
-          children: [
-            const Spacer(),
-            SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3,
-                child: _buildMenu(context, theme)),
-          ],
-        ));
+    return BaseWidget<ProfileState>(
+        state: Provider.of<ProfileState>(context),
+        onStateReady: (state) async {},
+        builder: (context, state, child) {
+          return Scaffold(
+              backgroundColor: theme.colors.backgroundColor,
+              body: Column(
+                children: [
+                  const Spacer(),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      child: _buildMenu(state, context, theme)),
+                ],
+              ));
+        });
   }
 
-  Widget _buildMenu(BuildContext context, ThemeManager theme) {
+  Widget _buildMenu(
+      ProfileState state, BuildContext context, ThemeManager theme) {
     List<HexagonWidgetBuilder> menu = [
       HexagonWidgetBuilder(
           elevation: 2,
@@ -43,8 +51,17 @@ class Home extends StatelessWidget {
           color: theme.colors.highlight,
           child: InkWell(
               onTap: () {
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => ProfileProvider(
+                        child: ActivityScreen(),
+                      ),
+                      transitionDuration: Duration(milliseconds: 700),
+                      transitionsBuilder: (_, a, __, c) =>
+                          FadeTransition(opacity: a, child: c),
+                    ));
                 print('activity started');
-                _sendMessage();
               },
               child: Column(
                 children: [
@@ -154,8 +171,8 @@ class Home extends StatelessWidget {
               Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => FeedProvider(
-                      child: ProfileProvider(child: ChallengeScreen()),
+                    pageBuilder: (_, __, ___) => ProfileProvider(
+                      child: ChallengeScreen(),
                     ),
                     transitionDuration: Duration(milliseconds: 700),
                     transitionsBuilder: (_, a, __, c) =>
@@ -230,18 +247,5 @@ class Home extends StatelessWidget {
           rows: 1,
           buildTile: (col, row) => menu.elementAt(col)),
     );
-  }
-
-  Future _sendMessage() async {
-    var func = FirebaseFunctions.instance.httpsCallable("notifySubscribers");
-    var res = await func.call(<String, dynamic>{
-      "targetDevices": [
-        "f6vbPygENEcwu07kCemcd0:APA91bGDmQKQki_bSi9CM_NuRB_LAz9uAxlTXfUsCgLSB7StVWjsGQDrLHTZ1ynggLsGDMXwNJX_42YlK79uVlxk9AG13uJDsuPs6k9FE_dy0-FPZs8TSsaHUFarYz6OCwdybXri6RtK"
-      ],
-      "messageTitle": "Test title",
-      "messageBody": "Test"
-    });
-
-    print("message was ${res.data as bool ? "sent!" : "not sent!"}");
   }
 }
